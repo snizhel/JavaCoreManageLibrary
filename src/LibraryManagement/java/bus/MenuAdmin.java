@@ -14,15 +14,17 @@ public class MenuAdmin {
   public MenuAdmin() {
     try {
       Book newBook = new Book();
-      int choice;        
+      int choice;
       Scanner sc = new Scanner(System.in);
       do {
         System.out.printf("======MENU=======\n");
-        System.out.printf("1/Book \n");
-        System.out.printf("2/Insert Book \n");
-        System.out.printf("3/Delete Book \n");
-        System.out.printf("4/Update Book \n");
-        System.out.printf("5/Search \n");
+        System.out.printf("1/Danh sach sach trong thu vien \n");
+        System.out.printf("2/Them sach \n");
+        System.out.printf("3/Xoa sach \n");
+        System.out.printf("4/Cap nhat sach trong thu vien \n");
+        System.out.printf("5/Tim kiem sach \n");
+        System.out.printf("6/Thong ke \n");
+        System.out.printf("7/Thoat\n");
         System.out.printf("------------------\n");
         System.out.printf("Chon chuc nang thuc hien:");
         choice = sc.nextInt();
@@ -42,12 +44,15 @@ public class MenuAdmin {
           case 5:
             BookDao.search();
             break;
+          case 6:
+            StatisticalBus.statistical();
+            break;
           default:
             System.out.println("chon sai chuc nang\n");
             break;
         }
-      } while (choice != 6);
-     
+      } while (choice != 7);
+
       sc.close();
     } catch (Exception e) {
       e.printStackTrace();

@@ -1,23 +1,23 @@
 package LibraryManagement.java.bus;
 
 import java.util.Scanner;
-import LibraryManagement.java.dao.BookDao;
+import LibraryManagement.java.dao.PhieuMuonDao;
 import LibraryManagement.java.dao.UserDao;
-import LibraryManagement.java.model.Book;
+import LibraryManagement.java.model.PhieuMuon;
 import LibraryManagement.java.model.User;
 
-public class MenuManageUser {
-  public MenuManageUser() {
+public class MenuPhieuMuon {
+  public MenuPhieuMuon() {
     try {
-      User newUser = new User();
+      PhieuMuon phieuMuon=new PhieuMuon();
       int choice;
       do {
         System.out.printf("======MENU=======\n");
-        System.out.printf("1/Danh sach khach hang \n");
-        System.out.printf("2/Dang ky khach hang \n");
-        System.out.printf("3/Xoa khach hang \n");
-        System.out.printf("4/Cap nhat khach hang \n");
-        System.out.printf("5/Tim kiem khach hang \n");
+        System.out.printf("1/Danh sach phieu muon sach \n");
+        System.out.printf("2/Dang ky muon sach \n");
+        System.out.printf("3/Xoa phieu muon \n");
+        System.out.printf("4/Cap nhat phieu muon \n");
+        System.out.printf("5/Tim kiem phieu muon \n");
         System.out.printf("6/Thoat\n");
         System.out.printf("------------------\n");
         System.out.printf("Chon chuc nang thuc hien:");
@@ -25,19 +25,19 @@ public class MenuManageUser {
         choice = sc.nextInt();
         switch (choice) {
           case 1:
-            System.out.println(UserDao.getUser());
+            System.out.println(PhieuMuonDao.getPhieuMuon());
             break;
           case 2:
-            UserBus.insertUser(newUser);
+            PhieuMuonBus.addPhieuMuon(phieuMuon);
             break;
           case 3:
-            UserBus.deleteUser(newUser);
+            PhieuMuonBus.deletePhieuMuon();
             break;
           case 4:
-            UserBus.editUser(newUser);
+            PhieuMuonBus.editPhieuMuon(phieuMuon);
             break;
           case 5:
-            UserDao.search();
+            PhieuMuonDao.search();
             break;
           default:
             System.out.println("chon sai chuc nang\n");
@@ -48,6 +48,4 @@ public class MenuManageUser {
       e.printStackTrace();
     }
   }
-
 }
-

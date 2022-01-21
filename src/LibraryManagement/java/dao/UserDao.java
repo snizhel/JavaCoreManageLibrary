@@ -20,7 +20,7 @@ public class UserDao {
   public static User Login(String taiKhoan, String pass) {
     User user = null;
     try {
-      peparedStatement = DbConnection.getConnect()
+      peparedStatement = DbConnection.getConnection()
           .prepareStatement("SELECT * FROM KHACH_HANG where Ma_Khach_hang = ? and Password=?");
       peparedStatement.setString(1, taiKhoan);
       peparedStatement.setString(2, pass);
@@ -42,43 +42,42 @@ public class UserDao {
 
   public static ResultSet showTextfield(String sql) {
     try {
-      peparedStatement = DbConnection.getConnect().prepareStatement(sql);
+      peparedStatement = DbConnection.getConnection().prepareStatement(sql);
       return peparedStatement.executeQuery();
     } catch (Exception e) {
       return null;
     }
   }
 
-  public static void insertUser(User kh) {
+  public static void insertUser(User user) {
     String sql = "insert into KHACH_HANG values(?,?,?,?,?,?,null)";
+    List<Object> listParam = new ArrayList<>();
     try {
-      peparedStatement = DbConnection.getConnect().prepareStatement(sql);
-      peparedStatement.setString(1, kh.getMaKH());
-      peparedStatement.setString(2, kh.getPass());
-      peparedStatement.setString(3, kh.getName());
-      peparedStatement.setDate(4, kh.getBirth());
-      peparedStatement.setString(5, kh.getDiaChi());
-      peparedStatement.setString(6, kh.getPhone());
-
-      peparedStatement.execute();
+      listParam.add(user.getMaKH());
+      listParam.add(user.getPass());
+      listParam.add(user.getName());
+      listParam.add(user.getBirth());
+      listParam.add(user.getDiaChi());
+      listParam.add(user.getPhone());
+      DbConnection.prepareSQL(sql, listParam).execute();
       System.out.println("Them khach hang thanh cong");
     } catch (Exception e) {
       System.out.println("Them khach hang khong thanh cong");
     }
   }
 
-  public static boolean updateUser(User kh) {
+  public static boolean updateUser(User user) {
     try {
-      peparedStatement = DbConnection.getConnect()
-          .prepareStatement("UPDATE KHACH_HANG SET Password = ?, Ten_Khach_hang = ?,"
-              + "Ngay_sinh = ?, Dia_chi = ?, Phone = ? where Ma_Khach_hang = ?");
-      peparedStatement.setString(6, kh.getMaKH());
-      peparedStatement.setString(1, kh.getPass());
-      peparedStatement.setString(2, kh.getName());
-      peparedStatement.setDate(3, kh.getBirth());
-      peparedStatement.setString(4, kh.getDiaChi());
-      peparedStatement.setString(5, kh.getPhone());
-      return peparedStatement.executeUpdate() > 0;
+      String sql = "UPDATE KHACH_HANG SET Password = ?, Ten_Khach_hang = ?,"
+          + "Ngay_sinh = ?, Dia_chi = ?, Phone = ? where Ma_Khach_hang = ?";
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(user.getPass());
+      listParam.add(user.getName());
+      listParam.add(user.getBirth());
+      listParam.add(user.getDiaChi());
+      listParam.add(user.getPhone());
+      listParam.add(user.getMaKH());
+      return DbConnection.prepareSQL(sql, listParam).executeUpdate() > 0;
     } catch (Exception e) {
       return false;
     }
@@ -86,10 +85,10 @@ public class UserDao {
 
   public static boolean deleteUser(String maKH) {
     try {
-      peparedStatement = DbConnection.getConnect()
-          .prepareStatement("DELETE FROM KHACH_HANG WHERE Ma_Khach_hang = ?");
-      peparedStatement.setString(1, maKH);
-      return peparedStatement.executeUpdate() > 0;
+      String sql = "DELETE FROM KHACH_HANG WHERE Ma_Khach_hang = ?";
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(maKH);
+      return DbConnection.prepareSQL(sql, listParam).executeUpdate() > 0;
     } catch (Exception e) {
       return false;
     }
@@ -99,7 +98,7 @@ public class UserDao {
     try {
       List<User> listUser = new ArrayList<User>();
       PreparedStatement pstmt =
-          DbConnection.getConnect().prepareStatement("SELECT * from KHACH_HANG");
+          DbConnection.getConnection().prepareStatement("SELECT * from KHACH_HANG");
       ResultSet resultSet = pstmt.executeQuery();
       while (resultSet.next()) {
         User user = new User();
@@ -117,12 +116,13 @@ public class UserDao {
     }
     return Collections.emptyList();
   }
+
   public static void search() {
     try {
       List<User> listUser = new ArrayList<User>();
       Scanner input = new Scanner(System.in);
       System.out.print("Search: ");
-      Statement smt = DbConnection.getConnect().createStatement();
+      Statement smt = DbConnection.getConnection().createStatement();
       String sql = "SELECT * from KHACH_HANG WHERE Ma_Khach_Hang like N'%" + input.next() + "%'";
       ResultSet resultSet = smt.executeQuery(sql);
       while (resultSet.next()) {

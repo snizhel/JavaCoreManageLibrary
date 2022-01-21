@@ -58,7 +58,7 @@ public class PhieuMuon {
     }
     @Override
     public String toString() {
-      return  getMaKhach()+" "+getMaMuon()+" "+getSach()+" "+getHanTra()+" "+getNgayMuon();
+      return "{ Phieu muon="+" "+"ma khach hang:"+  getMaKhach()+" "+", ma phieu muon:"+getMaMuon()+" "+", ma sach:"+getSach()+" "+", ngay muon:"+getNgayMuon()+" "+", han tra:"+getHanTra();
     }
     
 }

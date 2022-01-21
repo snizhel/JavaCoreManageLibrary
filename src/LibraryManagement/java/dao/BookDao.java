@@ -14,11 +14,12 @@ import LibraryManagement.java.model.Book;
 public class BookDao {
   public static PreparedStatement preparedStatement;
   public static ResultSet resultSet;
+
   private BookDao() {}
 
   public static ResultSet showTextfield(String sql) {
     try {
-      preparedStatement = DbConnection.getConnect().prepareStatement(sql);
+      preparedStatement = DbConnection.getConnection().prepareStatement(sql);
       return preparedStatement.executeQuery();
     } catch (Exception e) {
       return null;
@@ -28,44 +29,45 @@ public class BookDao {
   public static void insertSach(Book book) {
     String sql = "insert into SACH values(?,?,?,?,?,?,null)";
     try {
-      preparedStatement = DbConnection.getConnect().prepareStatement(sql);
-      System.out.println(preparedStatement);
-      preparedStatement.setString(1, book.getMaSach());
-      preparedStatement.setString(2, book.getTenSach());
-      preparedStatement.setString(3, book.getTenTacGia());
-      preparedStatement.setString(4, book.getNhaXB());
-      preparedStatement.setInt(5, book.getGiaTien());
-      preparedStatement.setInt(6, book.getSoLuong());
-      preparedStatement.execute();
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(book.getMaSach());
+      listParam.add(book.getTenSach());
+      listParam.add(book.getTenTacGia());
+      listParam.add(book.getNhaXB());
+      listParam.add(book.getGiaTien());
+      listParam.add(book.getSoLuong());
+      DbConnection.prepareSQL(sql, listParam).execute();
       System.out.println("them thanh cong");
     } catch (Exception e) {
-      System.out.println(e);
+      e.printStackTrace();
     }
   }
 
   public static boolean updateSach(Book s) {
     try {
-      preparedStatement = DbConnection.getConnect()
-          .prepareStatement("UPDATE SACH SET  Ten_Sach = ?, Ten_Tac_gia = ?,"
-              + "Nha_xb = ?, Gia_tien = ?, So_luong = ? where Ma_Sach = ?");
-      preparedStatement.setString(6, s.getMaSach());
-      preparedStatement.setString(1, s.getTenSach());
-      preparedStatement.setString(2, s.getTenTacGia());
-      preparedStatement.setString(3, s.getNhaXB());
-      preparedStatement.setInt(4, s.getGiaTien());
-      preparedStatement.setInt(5, s.getSoLuong());
-      return preparedStatement.executeUpdate() > 0;
+      String sql = "UPDATE SACH SET  Ten_Sach = ?, Ten_Tac_gia = ?,"
+          + "Nha_xb = ?, Gia_tien = ?, So_luong = ? where Ma_Sach = ?";
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(s.getTenSach());
+      listParam.add(s.getTenTacGia());
+      listParam.add(s.getNhaXB());
+      listParam.add(s.getGiaTien());
+      listParam.add(s.getSoLuong());
+      listParam.add(s.getMaSach());
+      preparedStatement = DbConnection.prepareSQL(sql, listParam);
+      int result = preparedStatement.executeUpdate();
+      return result > 0;
     } catch (Exception e) {
       return false;
     }
   }
 
-  public static boolean deleteSach(String ms) {
+  public static boolean deleteSach(String idBook) {
     try {
-      preparedStatement =
-          DbConnection.getConnect().prepareStatement("DELETE FROM SACH WHERE Ma_Sach = ?");
-      preparedStatement.setString(1, ms);
-      return preparedStatement.executeUpdate() > 0;
+      String sql = "DELETE FROM SACH WHERE Ma_Sach = ?";
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(idBook);
+      return DbConnection.prepareSQL(sql, listParam).executeUpdate() > 0;
     } catch (Exception e) {
       return false;
     }
@@ -73,8 +75,8 @@ public class BookDao {
 
   public static List<Book> getBook() {
     try {
-      List<Book> listBook = new ArrayList<Book>();
-      PreparedStatement pstmt = DbConnection.getConnect().prepareStatement("SELECT * from SACH");
+      List<Book> listBook = new ArrayList<>();
+      PreparedStatement pstmt = DbConnection.prepareSQL("SELECT * from SACH");
       ResultSet resultSet = pstmt.executeQuery();
       while (resultSet.next()) {
         Book book = new Book();
@@ -98,7 +100,7 @@ public class BookDao {
       List<Book> listBook = new ArrayList<Book>();
       Scanner input = new Scanner(System.in);
       System.out.print("Search: ");
-      Statement smt = DbConnection.getConnect().createStatement();
+      Statement smt = DbConnection.getConnection().createStatement();
       String sql = "SELECT * from SACH WHERE Ma_Sach like N'%" + input.next() + "%'";
       ResultSet resultSet = smt.executeQuery(sql);
       while (resultSet.next()) {

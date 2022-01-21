@@ -23,7 +23,6 @@ public class Login {
         System.out.printf("======MENU=======\n");
         System.out.printf("1/Admin \n");
         System.out.printf("2/User \n");
-
         System.out.printf("------------------\n");
         System.out.printf("Chon chuc nang thuc hien:");
         Scanner sc = new Scanner(System.in);
@@ -43,6 +42,8 @@ public class Login {
                 System.out.printf("======MENU FOR ADMIN=======\n");
                 System.out.printf("1/Menu Book \n");
                 System.out.printf("2/Menu User \n");
+                System.out.printf("3/Menu Borrow voucher \n");
+                System.out.printf("4/Exit\n");
                 System.out.printf("------------------\n");
                 System.out.printf("Chon menu thuc hien:");
                 Scanner sc1 = new Scanner(System.in);
@@ -54,11 +55,14 @@ public class Login {
                   case 2:
                     MenuManageUser menu1 = new MenuManageUser();
                     break;
+                  case 3:
+                    MenuPhieuMuon menu2 = new MenuPhieuMuon();
+                    break;
                   default:
                     System.out.println("chon sai chuc nang\n");
-                    
+
                 }
-              } while (choose != 3);
+              } while (choose != 4);
             } else
               System.out.println("dang nhap khong thanh cong ");
             break;
@@ -70,8 +74,8 @@ public class Login {
             String password1 = input1.next();
             User user = UserDao.Login(username1, password1);
             if (user != null) {
-
               System.out.println("khach hang dang nhap thanh cong ");
+              MenuUser menu = new MenuUser();
             } else
               System.out.println("khach hang dang nhap khong thanh cong ");
             break;
@@ -81,7 +85,7 @@ public class Login {
         }
       } while (choice != 3);
     } catch (Exception e) {
-      System.out.println("dang nhap that bai");
+      e.printStackTrace();
     }
   }
 
