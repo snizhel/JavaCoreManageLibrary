@@ -17,14 +17,7 @@ public class PhieuMuonDao {
   public static PreparedStatement preparedStatement;
   public static ResultSet resultSet;
 
-  public static ResultSet showTextfield(String sql) {
-    try {
-      preparedStatement = DbConnection.getConnection().prepareStatement(sql);
-      return preparedStatement.executeQuery();
-    } catch (Exception e) {
-      return null;
-    }
-  }
+
 
   public static void insertPhieu(PhieuMuon phieuMuon) {
     String sql = "insert into PHIEU_MUON values(?,?,?,?,?,null,null,null)";
@@ -69,12 +62,11 @@ public class PhieuMuonDao {
     }
   }
 
-  public static List<PhieuMuon> getPhieuMuon() {
+  public static List<Object> getPhieuMuon() {
     try {
-      List<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
-      PreparedStatement pstmt =
-          DbConnection.getConnection().prepareStatement("SELECT * from PHIEU_MUON");
-      ResultSet resultSet = pstmt.executeQuery();
+      List<Object> listParam = new ArrayList<>();
+      String sql = "SELECT * from PHIEU_MUON";
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery();
       while (resultSet.next()) {
         PhieuMuon PhieuMuon = new PhieuMuon();
         PhieuMuon.setMaMuon(resultSet.getObject("ma_phieu_muon", String.class));
@@ -82,9 +74,9 @@ public class PhieuMuonDao {
         PhieuMuon.setMaSach(resultSet.getObject("ma_sach", String.class));
         PhieuMuon.setNgayMuon(resultSet.getObject("ngay_muon", Date.class));
         PhieuMuon.setHanTra(resultSet.getObject("han_tra", Date.class));
-        listPhieuMuon.add(PhieuMuon);
+        listParam.add(PhieuMuon);
       }
-      return listPhieuMuon;
+      return listParam;
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -93,12 +85,11 @@ public class PhieuMuonDao {
 
   public static void search() {
     try {
-      List<PhieuMuon> listPhieuMuon = new ArrayList<PhieuMuon>();
+      List<Object> listParam = new ArrayList<>();
       Scanner input = new Scanner(System.in);
       System.out.print("Search: ");
-      Statement smt = DbConnection.getConnection().createStatement();
       String sql = "SELECT * from PHIEU_MUON WHERE Ma_Phieu_Muon like N'%" + input.next() + "%'";
-      ResultSet resultSet = smt.executeQuery(sql);
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery(sql);
       while (resultSet.next()) {
         PhieuMuon PhieuMuon = new PhieuMuon();
         PhieuMuon.setMaMuon(resultSet.getObject("ma_phieu_muon", String.class));
@@ -106,9 +97,9 @@ public class PhieuMuonDao {
         PhieuMuon.setMaSach(resultSet.getObject("ma_sach", String.class));
         PhieuMuon.setNgayMuon(resultSet.getObject("ngay_muon", Date.class));
         PhieuMuon.setHanTra(resultSet.getObject("han_tra", Date.class));
-        listPhieuMuon.add(PhieuMuon);
+        listParam.add(PhieuMuon);
       }
-      System.out.println(listPhieuMuon);
+      System.out.println(listParam);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

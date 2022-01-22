@@ -17,15 +17,6 @@ public class BookDao {
 
   private BookDao() {}
 
-  public static ResultSet showTextfield(String sql) {
-    try {
-      preparedStatement = DbConnection.getConnection().prepareStatement(sql);
-      return preparedStatement.executeQuery();
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
   public static void insertSach(Book book) {
     String sql = "insert into SACH values(?,?,?,?,?,?,null)";
     try {
@@ -73,11 +64,11 @@ public class BookDao {
     }
   }
 
-  public static List<Book> getBook() {
+  public static List<Object> getBook() {
     try {
-      List<Book> listBook = new ArrayList<>();
-      PreparedStatement pstmt = DbConnection.prepareSQL("SELECT * from SACH");
-      ResultSet resultSet = pstmt.executeQuery();
+      List<Object> listParam = new ArrayList<>();
+      String sql = "SELECT * from SACH";
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery();
       while (resultSet.next()) {
         Book book = new Book();
         book.setGiaTien(resultSet.getObject("gia_tien", Integer.class));
@@ -86,9 +77,9 @@ public class BookDao {
         book.setSoLuong(resultSet.getObject("so_luong", Integer.class));
         book.setTenSach(resultSet.getObject("ten_sach", String.class));
         book.setTenTacGia(resultSet.getObject("ten_tac_gia", String.class));
-        listBook.add(book);
+        listParam.add(book);
       }
-      return listBook;
+      return listParam;
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }
@@ -97,12 +88,11 @@ public class BookDao {
 
   public static void search() {
     try {
-      List<Book> listBook = new ArrayList<Book>();
+      List<Object> listParam = new ArrayList<>();
       Scanner input = new Scanner(System.in);
       System.out.print("Search: ");
-      Statement smt = DbConnection.getConnection().createStatement();
       String sql = "SELECT * from SACH WHERE Ma_Sach like N'%" + input.next() + "%'";
-      ResultSet resultSet = smt.executeQuery(sql);
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery(sql);
       while (resultSet.next()) {
         Book book = new Book();
         book.setGiaTien(resultSet.getObject("gia_tien", Integer.class));
@@ -111,9 +101,9 @@ public class BookDao {
         book.setSoLuong(resultSet.getObject("so_luong", Integer.class));
         book.setTenSach(resultSet.getObject("ten_sach", String.class));
         book.setTenTacGia(resultSet.getObject("ten_tac_gia", String.class));
-        listBook.add(book);
+        listParam.add(book);
       }
-      System.out.println(listBook);
+      System.out.println(listParam);
     } catch (Exception e) {
       System.out.println(e.getMessage());
     }

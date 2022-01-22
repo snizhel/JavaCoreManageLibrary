@@ -70,11 +70,16 @@ public class Book {
     this.soLuong = sl;
   }
 
+
   @Override
   public String toString() {
-    return "{book="+" " + "gia tien:" + " " + String.valueOf(getGiaTien()) + " " + ",ma sach:"
-        + String.valueOf(getMaSach()) + " " + ", nha xuat ban:" + " " + getNhaXB() + " "
-        + ", ten sach:" + " " + getTenSach() + " " + ", ten tac gia" + getTenTacGia() + " "
-        + ", so luong:" + String.valueOf(getSoLuong())+ '}';
+    StringBuffer str = new StringBuffer("\nbook={");
+    str.append("\ngia tien:").append(String.valueOf(getGiaTien())).append("\n").append("\nma sach:")
+        .append(String.valueOf(getMaSach())).append("\n").append("\nnha xuat ban:")
+        .append(getNhaXB()).append("\n").append("\nten sach:").append(getTenSach()).append("\n")
+        .append("\nten tac gia:").append(getTenTacGia()).append("\n").append("\nso luong:")
+        .append(String.valueOf(getSoLuong())).append('}');
+    return str.toString();
+
   }
 }

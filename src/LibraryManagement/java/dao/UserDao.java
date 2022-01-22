@@ -14,20 +14,19 @@ import LibraryManagement.java.model.User;
 
 
 public class UserDao {
-  public static PreparedStatement peparedStatement;
-  public static ResultSet resultSet;
+
+
 
   public static User Login(String taiKhoan, String pass) {
     User user = null;
     try {
-      peparedStatement = DbConnection.getConnection()
-          .prepareStatement("SELECT * FROM KHACH_HANG where Ma_Khach_hang = ? and Password=?");
-      peparedStatement.setString(1, taiKhoan);
-      peparedStatement.setString(2, pass);
-      resultSet = peparedStatement.executeQuery();
+      String sql = "SELECT * FROM KHACH_HANG where Ma_Khach_hang = ? and Password=?";
+      List<Object> listParam = new ArrayList<>();
+      listParam.add(taiKhoan);
+      listParam.add(pass);
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery();
       while (resultSet.next()) {
         user = new User();
-
         user.setBirth(resultSet.getDate("Ngay_sinh"));
         user.setName(resultSet.getString("Ten_Khach_hang"));
         user.setDiaChi(resultSet.getString("Dia_chi"));
@@ -40,14 +39,6 @@ public class UserDao {
   }
 
 
-  public static ResultSet showTextfield(String sql) {
-    try {
-      peparedStatement = DbConnection.getConnection().prepareStatement(sql);
-      return peparedStatement.executeQuery();
-    } catch (Exception e) {
-      return null;
-    }
-  }
 
   public static void insertUser(User user) {
     String sql = "insert into KHACH_HANG values(?,?,?,?,?,?,null)";
@@ -94,12 +85,11 @@ public class UserDao {
     }
   }
 
-  public static List<User> getUser() {
+  public static List<Object> getUser() {
     try {
-      List<User> listUser = new ArrayList<User>();
-      PreparedStatement pstmt =
-          DbConnection.getConnection().prepareStatement("SELECT * from KHACH_HANG");
-      ResultSet resultSet = pstmt.executeQuery();
+      List<Object> listParam = new ArrayList<>();
+      String sql = "SELECT * from KHACH_HANG";
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery();
       while (resultSet.next()) {
         User user = new User();
         user.setMaKH(resultSet.getObject("ma_khach_hang", String.class));
@@ -108,23 +98,22 @@ public class UserDao {
         user.setDiaChi(resultSet.getObject("dia_chi", String.class));
         user.setBirth(resultSet.getObject("ngay_sinh", Date.class));
         user.setPhone(resultSet.getObject("phone", String.class));
-        listUser.add(user);
+        listParam.add(user);
       }
-      return listUser;
+      return listParam;
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
     return Collections.emptyList();
   }
 
   public static void search() {
     try {
-      List<User> listUser = new ArrayList<User>();
+      List<Object> listParam = new ArrayList<>();
       Scanner input = new Scanner(System.in);
       System.out.print("Search: ");
-      Statement smt = DbConnection.getConnection().createStatement();
       String sql = "SELECT * from KHACH_HANG WHERE Ma_Khach_Hang like N'%" + input.next() + "%'";
-      ResultSet resultSet = smt.executeQuery(sql);
+      ResultSet resultSet = DbConnection.prepareSQL(sql, listParam).executeQuery(sql);
       while (resultSet.next()) {
         User user = new User();
         user.setMaKH(resultSet.getObject("ma_khach_hang", String.class));
@@ -133,11 +122,11 @@ public class UserDao {
         user.setDiaChi(resultSet.getObject("dia_chi", String.class));
         user.setBirth(resultSet.getObject("ngay_sinh", Date.class));
         user.setPhone(resultSet.getObject("phone", String.class));
-        listUser.add(user);
+        listParam.add(user);
       }
-      System.out.println(listUser);
+      System.out.println(listParam);
     } catch (Exception e) {
-      System.out.println(e.getMessage());
+      e.printStackTrace();
     }
 
   }

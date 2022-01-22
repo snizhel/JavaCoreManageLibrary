@@ -1,15 +1,17 @@
 package LibraryManagement.java.bus;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 import LibraryManagement.java.dao.PhieuMuonDao;
-import LibraryManagement.java.dao.UserDao;
 import LibraryManagement.java.model.PhieuMuon;
-import LibraryManagement.java.model.User;
 
 public class MenuPhieuMuon {
   public MenuPhieuMuon() {
     try {
-      PhieuMuon phieuMuon=new PhieuMuon();
+
       int choice;
       do {
         System.out.printf("======MENU=======\n");
@@ -28,13 +30,13 @@ public class MenuPhieuMuon {
             System.out.println(PhieuMuonDao.getPhieuMuon());
             break;
           case 2:
-            PhieuMuonBus.addPhieuMuon(phieuMuon);
+            addPhieuMuon();
             break;
           case 3:
-            PhieuMuonBus.deletePhieuMuon();
+            deletePhieuMuon();
             break;
           case 4:
-            PhieuMuonBus.editPhieuMuon(phieuMuon);
+            editPhieuMuon();
             break;
           case 5:
             PhieuMuonDao.search();
@@ -47,5 +49,102 @@ public class MenuPhieuMuon {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private boolean deletePhieuMuon() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("ID:");
+    String idPhieu = input.nextLine();
+    PhieuMuonDao.deletePhieu(idPhieu);
+    System.out.println("Delete successfull");
+    return true;
+  }
+
+  private void editPhieuMuon() {
+    PhieuMuon phieuMuon = new PhieuMuon();
+    Scanner input = new Scanner(System.in);
+    DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+    java.sql.Date doBorrow;
+    java.sql.Date paymentTerm;
+    Date apptDay1 = null;
+    Date apptDay = null;
+    System.out.println("ID Phieu Muon:");
+    String id = input.nextLine();
+    System.out.println("ID User:");
+    String idUser = input.nextLine();
+    System.out.println("ID Book:");
+    String idBook = input.nextLine();
+    System.out.println("Borrow day(dd-MM-yyyy):");
+    while (apptDay == null) {
+      try {
+        String borrowDay = input.nextLine();
+        apptDay = (Date) format.parse(borrowDay);
+      } catch (ParseException e) {
+        System.out.println("Please enter a valid date! Format is yyyy/mm/dd");
+      }
+    }
+    doBorrow = new java.sql.Date(apptDay.getTime());
+    System.out.println("Payment Term(dd-MM-yyyy):");
+    while (apptDay1 == null) {
+      try {
+        String payTermDay = input.nextLine();
+        apptDay1 = (Date) format.parse(payTermDay);
+      } catch (ParseException e) {
+        System.out.println("Please enter a valid date! Format is yyyy/mm/dd");
+      }
+    }
+    paymentTerm = new java.sql.Date(apptDay1.getTime());
+    phieuMuon.setMaMuon(id);
+    phieuMuon.setMaKhach(idUser);
+    phieuMuon.setMaSach(idBook);
+    phieuMuon.setNgayMuon(doBorrow);
+    phieuMuon.setHanTra(paymentTerm);
+    PhieuMuonBus.editPhieuMuon(phieuMuon);
+    
+  }
+
+  private void addPhieuMuon() {
+    PhieuMuon phieuMuon = new PhieuMuon();
+    Scanner input = new Scanner(System.in);
+    DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+    java.sql.Date doBorrow;
+    java.sql.Date paymentTerm;
+    Date apptDay1 = null;
+    Date apptDay = null;
+    System.out.println("ID Phieu Muon:");
+    String id = input.nextLine();
+    System.out.println("ID User:");
+    String idUser = input.nextLine();
+    System.out.println("ID Book:");
+    String idBook = input.nextLine();
+    System.out.println("Borrow day(dd-MM-yyyy):");
+    while (apptDay == null) {
+      try {
+        String borrowDay = input.nextLine();
+        apptDay = (Date) format.parse(borrowDay);
+      } catch (ParseException e) {
+        System.out.println("Please enter a valid date! Format is yyyy/mm/dd");
+
+      }
+    }
+    doBorrow = new java.sql.Date(apptDay.getTime());
+    System.out.println("Payment Term(dd-MM-yyyy):");
+    while (apptDay1 == null) {
+      try {
+        String payTermDay = input.nextLine();
+        apptDay1 = (Date) format.parse(payTermDay);
+      } catch (ParseException e) {
+        System.out.println("Please enter a valid date! Format is yyyy/mm/dd");
+
+      }
+    }
+    paymentTerm = new java.sql.Date(apptDay1.getTime());
+    phieuMuon.setMaMuon(id);
+    phieuMuon.setMaKhach(idUser);
+    phieuMuon.setMaSach(idBook);
+    phieuMuon.setNgayMuon(doBorrow);
+    phieuMuon.setHanTra(paymentTerm);
+    PhieuMuonBus.addPhieuMuon(phieuMuon);
+    
   }
 }

@@ -1,19 +1,12 @@
 package LibraryManagement.java.bus;
 
-import java.util.ArrayList;
 import java.util.Scanner;
-import LibraryManagement.java.dao.AdminDao;
 import LibraryManagement.java.dao.BookDao;
-import LibraryManagement.java.dao.UserDao;
-import LibraryManagement.java.model.Admin;
 import LibraryManagement.java.model.Book;
-import LibraryManagement.java.model.User;
-import java.sql.ResultSet;
 
 public class MenuAdmin {
   public MenuAdmin() {
     try {
-      Book newBook = new Book();
       int choice;
       Scanner sc = new Scanner(System.in);
       do {
@@ -33,13 +26,13 @@ public class MenuAdmin {
             System.out.println(BookDao.getBook());
             break;
           case 2:
-            BookBus.insertBook(newBook);
+            insertBook();
             break;
           case 3:
-            BookBus.deleteBook();
+            deleteBook();
             break;
           case 4:
-            BookBus.updateBook(newBook);
+            updateBook();
             break;
           case 5:
             BookDao.search();
@@ -52,11 +45,66 @@ public class MenuAdmin {
             break;
         }
       } while (choice != 7);
-
-      sc.close();
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private boolean deleteBook() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("ma sach:");
+    String masach = input.nextLine();
+    BookDao.deleteSach(masach);
+    System.out.println("Delete successfull");
+    return true;
+  }
+
+  private void updateBook() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("ma sach:");
+    String masach = input.nextLine();
+    System.out.println("ten sach:");
+    String name = input.nextLine();
+    System.out.println("ten tac gia: ");
+    String tacgia = input.nextLine();
+    System.out.println("nha xuat ban:");
+    String nxb = input.nextLine();
+    System.out.println("gia tien:");
+    Integer giatien = input.nextInt();
+    System.out.println("so luong:");
+    Integer sl = input.nextInt();
+    Book newBook = new Book();
+    newBook.setMaSach(masach);
+    newBook.setTenSach(name);
+    newBook.setTenTacGia(tacgia);
+    newBook.setNhaXB(nxb);
+    newBook.setGiaTien(giatien);
+    newBook.setSoLuong(sl);
+    BookBus.updateBook(newBook);
+  }
+
+  public void insertBook() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("ma sach:");
+    String masach = input.nextLine();
+    System.out.println("ten sach:");
+    String name = input.nextLine();
+    System.out.println("ten tac gia: ");
+    String tacgia = input.nextLine();
+    System.out.println("nha xuat ban:");
+    String nxb = input.nextLine();
+    System.out.println("gia tien:");
+    Integer giatien = input.nextInt();
+    System.out.println("so luong:");
+    Integer sl = input.nextInt();
+    Book newBook = new Book();
+    newBook.setMaSach(masach);
+    newBook.setTenSach(name);
+    newBook.setTenTacGia(tacgia);
+    newBook.setNhaXB(nxb);
+    newBook.setGiaTien(giatien);
+    newBook.setSoLuong(sl);
+    BookBus.insertBook(newBook);
   }
 
 

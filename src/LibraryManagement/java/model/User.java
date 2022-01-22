@@ -73,10 +73,12 @@ public class User {
 
   @Override
   public String toString() {
+    StringBuffer str = new StringBuffer("\nUser = {");
+    str.append("\nma khach hang:").append(getMaKH()).append("\n").append("\nten khach hang:")
+        .append(getName()).append("\n").append("\nmat khau:").append(getPass()).append("\n")
+        .append("\nsdt:").append(getPhone()).append("\nngay sinh:").append(getBirth()).append('}');
+    return str.toString();
 
-    return "User = {" + "ma khach hang:" + " " + getMaKH() + " " + ", ten khach hang:" + " "
-        + getName() + " " + ", mat khau:" + " " + getPass() + " " + ", sdt:" + " " + getPhone()
-        + " " + ", ngay sinh:" + " " + getBirth() + '}';
   }
 }
 
