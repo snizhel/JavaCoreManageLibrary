@@ -15,7 +15,7 @@ public class DbConnection {
 
   public static Connection getConnection() throws SQLException {
     if (connection == null) {
-      connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/qltv", "root", "admin");
+      connection = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;databaseName=QLTV;Username=sa;Password =1");
     }
     return connection;
   }

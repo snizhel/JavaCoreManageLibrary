@@ -53,7 +53,7 @@ public class Login {
       new MenuUser();
     } else
       System.out.println("khach hang dang nhap khong thanh cong ");
-    scanner.close();
+    
   }
 
   public void loginAdmin() {
